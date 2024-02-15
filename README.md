@@ -1,0 +1,25 @@
+
+# Lol Account Manager
+
+Lol Account Manager is a user-friendly application designed to simplify the management of League of Legends (LoL) accounts. Whether you have multiple accounts or need a convenient way to handle your credentials, this tool offers a streamlined solution.
+## Key Features
+
+ - Effortless Login: Log in seamlessly using your username and password.
+ - Account Management: Add, modify, and delete LoL accounts effortlessly.
+ - Modern UI: Enjoy a clean and modern user interface for a pleasant user experience. 
+
+
+## Screenshots
+
+![App Screenshot](https://private-user-images.githubusercontent.com/113895445/305098883-7d6156b5-9f93-4891-8e38-fefe9ea122ed.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MDgwMDYxMDksIm5iZiI6MTcwODAwNTgwOSwicGF0aCI6Ii8xMTM4OTU0NDUvMzA1MDk4ODgzLTdkNjE1NmI1LTlmOTMtNDg5MS04ZTM4LWZlZmU5ZWExMjJlZC5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwMjE1JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDIxNVQxNDAzMjlaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT05NDk1YWI2YTFkNjMxMDQ1NjY1ZGJiMmFlNmRhMjljNWQ3ZjY5Zjc0MjQ1YWRhMDdiOGNhOTMzNGM4Nzc3OWEzJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.50Tnk6ne8VqMtgD5J_zAfoMUWgixQQOWXtVPrBDc3dI)
+
+![App Screenshot](https://private-user-images.githubusercontent.com/113895445/305098888-e8ced4b2-d53c-4fe9-9b95-37913086cff1.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MDgwMDYxMDksIm5iZiI6MTcwODAwNTgwOSwicGF0aCI6Ii8xMTM4OTU0NDUvMzA1MDk4ODg4LWU4Y2VkNGIyLWQ1M2MtNGZlOS05Yjk1LTM3OTEzMDg2Y2ZmMS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwMjE1JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDIxNVQxNDAzMjlaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT0zOTNkNjUwMjdhMTY4M2MwYWFmODU3YmI1NmU2YmI0MDkyM2Q3NzJlMjlmY2RhNDI5N2ZkMTM3MzllODU2MWU4JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.be2JJos7k2bCh3HCqoNLROsUpNPa_HSEMLF3OwM948I)
+
+
+## Installation
+
+Download Setup of last version in [Release](https://github.com/Marin-Clement/LolAccountManager/releases) Tab.
+
+## Thanks You
+
+Thank you for using Lol Account Manager! Your support and feedback are greatly appreciated. If you have any suggestions, encounter issues, or want to contribute to the project, feel free to open an issue or submit a pull request.
