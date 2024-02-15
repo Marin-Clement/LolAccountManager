@@ -1,0 +1,7 @@
+.git
+.idea
+packages
+LolAccountManager.sln
+LolAccountManager.sln.DotSettings.user
+LolAccountManager/bin
+LolAccountManager/obj
