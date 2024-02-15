@@ -13,13 +13,21 @@ namespace LolAccountManager
 {
     public partial class MainWindow
     {
-        private const string JsonFilePath = "accounts.json";
+        private const string JsonFileName = "accounts.json";
+        private readonly string _jsonFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "LolAccountManager", JsonFileName);
 
         private ObservableCollection<Account> _accounts;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            // Create the directory if it doesn't exist
+            if (!Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "LolAccountManager")))
+            {
+                Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "LolAccountManager"));
+            }
+
             LoadAccounts();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             AccountListView.ItemsSource = _accounts;
@@ -42,9 +50,9 @@ namespace LolAccountManager
 
         private void LoadAccounts()
         {
-            if (File.Exists(JsonFilePath))
+            if (File.Exists(_jsonFilePath))
             {
-                var json = File.ReadAllText(JsonFilePath);
+                var json = File.ReadAllText(_jsonFilePath);
                 _accounts = JsonConvert.DeserializeObject<ObservableCollection<Account>>(json);
             }
             else
@@ -56,7 +64,7 @@ namespace LolAccountManager
         private void SaveAccounts()
         {
             var json = JsonConvert.SerializeObject(_accounts);
-            File.WriteAllText(JsonFilePath, json);
+            File.WriteAllText(_jsonFilePath, json);
         }
 
         private void AddAccount_Click(object sender, RoutedEventArgs e)
