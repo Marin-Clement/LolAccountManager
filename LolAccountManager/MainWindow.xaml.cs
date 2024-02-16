@@ -2,108 +2,136 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Navigation;
-using Newtonsoft.Json;
-using WindowsInput;
-using WindowsInput.Native;
 
 namespace LolAccountManager
 {
     public partial class MainWindow
     {
-        private const string JsonFileName = "accounts.json";
-        private readonly string _jsonFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "LolAccountManager", JsonFileName);
+        private const string LolAccountManagerFolder = "LolAccountManager";
+        private const string RiotGamesPrivateSettingsFile = "RiotGamesPrivateSettings.yaml";
 
+        private const string RiotClientProcessName = "RiotClientServices";
+        private const string LeagueOfLegendsProcessName = "LeagueClient";
         private ObservableCollection<Account> _accounts;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            // Create the directory if it doesn't exist
-            if (!Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "LolAccountManager")))
-            {
-                Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "LolAccountManager"));
-            }
+            // create in MyDocuments/LolAccountManager
+            if (!Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    LolAccountManagerFolder)))
+                Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    LolAccountManagerFolder));
 
             LoadAccounts();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             AccountListView.ItemsSource = _accounts;
         }
 
-        [DllImport("user32.dll")]
-        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
-        [DllImport("user32.dll")]
-        private static extern bool SetForegroundWindow(IntPtr hWnd);
-
-        [DllImport("user32.dll")]
-        private static extern bool GetClientRect(IntPtr hWnd, out Rect lpRect);
-
-        [DllImport("user32.dll")]
-        private static extern bool ClientToScreen(IntPtr hWnd, ref Point lpPoint);
-
-        [DllImport("user32.dll")]
-        private static extern bool SetCursorPos(int x, int y);
-
         private void LoadAccounts()
         {
-            if (File.Exists(_jsonFilePath))
+            _accounts = new ObservableCollection<Account>();
+
+            // load from MyDocuments/LolAccountManager
+            var accountFolders = Directory.GetDirectories(
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    LolAccountManagerFolder));
+            foreach (var accountFolder in accountFolders)
             {
-                var json = File.ReadAllText(_jsonFilePath);
-                _accounts = JsonConvert.DeserializeObject<ObservableCollection<Account>>(json);
-            }
-            else
-            {
-                _accounts = new ObservableCollection<Account>();
+                var files = Directory.GetFiles(accountFolder);
+                foreach (var file in files)
+                    if (file.EndsWith(RiotGamesPrivateSettingsFile))
+                        _accounts.Add(new Account { Username = Path.GetFileName(accountFolder) });
             }
         }
 
-        private void SaveAccounts()
+        private void SaveAccount(Account account)
         {
-            var json = JsonConvert.SerializeObject(_accounts);
-            File.WriteAllText(_jsonFilePath, json);
+            var accountFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                LolAccountManagerFolder, account.Username);
+            if (!Directory.Exists(accountFolderPath)) Directory.CreateDirectory(accountFolderPath);
+            // copy the RiotGamesPrivateSettings.yaml file to the account folder
+            var sourceFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "Riot Games", "Riot Client", "Data", RiotGamesPrivateSettingsFile);
+            var destinationFilePath = Path.Combine(accountFolderPath, RiotGamesPrivateSettingsFile);
+            File.Copy(sourceFilePath, destinationFilePath, true);
         }
+
 
         private void AddAccount_Click(object sender, RoutedEventArgs e)
         {
             var addAccountWindow = new AddModifyAccountWindow();
             if (addAccountWindow.ShowDialog() != true) return;
             _accounts.Add(addAccountWindow.Account);
-            SaveAccounts();
+            Console.WriteLine(addAccountWindow.Account.Username);
+            SaveAccount(addAccountWindow.Account);
+            KillRiotRelatedProcesses();
+            Disconnect();
+            StartLeagueOfLegends();
         }
 
         private void DeleteAccount_Click(object sender, RoutedEventArgs e)
         {
             if (AccountListView.SelectedItem != null)
             {
+                var accountFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    LolAccountManagerFolder, (AccountListView.SelectedItem as Account).Username);
+                Directory.Delete(accountFolderPath, true);
                 _accounts.Remove(AccountListView.SelectedItem as Account);
-                SaveAccounts();
-            }
-            else
-            {
-                MessageBox.Show("Please select an account to delete.", "Information", MessageBoxButton.OK,
-                    MessageBoxImage.Information);
             }
         }
 
-        private void ModifyAccount_Click(object sender, RoutedEventArgs e)
+        private void Disconnect_Click(object sender, RoutedEventArgs e)
+        {
+            KillRiotRelatedProcesses();
+            Disconnect();
+            StartLeagueOfLegends();
+        }
+
+        private void Connect_Click(object sender, RoutedEventArgs e)
         {
             if (AccountListView.SelectedItem != null)
             {
-                var modifyAccountWindow = new AddModifyAccountWindow(AccountListView.SelectedItem as Account);
-                if (modifyAccountWindow.ShowDialog() != true) return;
-                var index = _accounts.IndexOf(AccountListView.SelectedItem as Account);
-                _accounts[index] = modifyAccountWindow.Account;
-                SaveAccounts();
+                KillRiotRelatedProcesses();
+
+                // replace the RiotGamesPrivateSettings.yaml file whis the selected account
+                var accountFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    LolAccountManagerFolder, (AccountListView.SelectedItem as Account).Username);
+                var sourceFilePath = Path.Combine(accountFolderPath, RiotGamesPrivateSettingsFile);
+                var destinationFilePath =
+                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                        "Riot Games", "Riot Client", "Data", RiotGamesPrivateSettingsFile);
+                File.Copy(sourceFilePath, destinationFilePath, true);
+
+                // start the client C:\Riot Games\League of Legends
+                StartLeagueOfLegends();
             }
-            else
-            {
-                MessageBox.Show("Please select an account to modify.", "Information", MessageBoxButton.OK,
-                    MessageBoxImage.Information);
-            }
+        }
+
+        private void Disconnect()
+        {
+            // delete the RiotGamesPrivateSettings.yaml file
+            var destinationFilePath =
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Riot Games",
+                    "Riot Client", "Data", RiotGamesPrivateSettingsFile);
+            File.Delete(destinationFilePath);
+        }
+
+        private void KillRiotRelatedProcesses()
+        {
+            foreach (var process in Process.GetProcessesByName(LeagueOfLegendsProcessName)) process.Kill();
+
+            foreach (var process in Process.GetProcessesByName(RiotClientProcessName)) process.Kill();
+        }
+
+        private void StartLeagueOfLegends()
+        {
+            Process.Start("C:\\Riot Games\\League of Legends\\LeagueClient.exe");
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
@@ -112,64 +140,16 @@ namespace LolAccountManager
             e.Handled = true;
         }
 
-        private void FocusRiotClient_Click(object sender, RoutedEventArgs e)
+        private void CopyUsername_Click(object sender, RoutedEventArgs e)
         {
-            var processes = Process.GetProcessesByName("RiotClientUx");
-            if (processes.Length > 0 && AccountListView.SelectedItem != null)
-            {
-                var hWnd = processes[0].MainWindowHandle;
-
-                ShowWindow(hWnd, 1);
-                SetForegroundWindow(hWnd);
-
-                // Set the cursor to the center of the Riot Client window
-                GetClientRect(hWnd, out var clientRect);
-                var usernameTextBoxPoint = new Point { X = clientRect.Left + 100, Y = clientRect.Top + 250 };
-                ClientToScreen(hWnd, ref usernameTextBoxPoint);
-                SetCursorPos(usernameTextBoxPoint.X, usernameTextBoxPoint.Y);
-                var inputSimulator = new InputSimulator();
-                inputSimulator.Mouse.LeftButtonClick();
-                inputSimulator.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL,
-                    VirtualKeyCode.VK_A);
-                inputSimulator.Keyboard.KeyPress(VirtualKeyCode.BACK);
-                inputSimulator.Keyboard.TextEntry((AccountListView.SelectedItem as Account)?.Username);
-                inputSimulator.Keyboard.KeyPress(VirtualKeyCode.TAB);
-                inputSimulator.Keyboard.TextEntry((AccountListView.SelectedItem as Account)?.Password);
-                inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RETURN);
-
-                // Reset the cursor to the center of the screen
-                SetCursorPos((int)SystemParameters.PrimaryScreenWidth / 2,
-                    (int)SystemParameters.PrimaryScreenHeight / 2);
-            }
-            else
-            {
-                MessageBox.Show("Riot Client is not running or you haven't selected an account.", "Warning",
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-        }
-
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct Rect
-        {
-            public int Left;
-            public int Top;
-            public int Right;
-            public int Bottom;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct Point
-        {
-            public int X;
-            public int Y;
+            if (AccountListView.SelectedItem != null)
+                Clipboard.SetText((AccountListView.SelectedItem as Account).Username);
         }
     }
 
     public class Account
     {
         public string Username { get; set; }
-        public string Password { get; set; }
 
         public override string ToString()
         {

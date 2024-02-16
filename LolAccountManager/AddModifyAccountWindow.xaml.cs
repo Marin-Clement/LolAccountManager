@@ -13,21 +13,20 @@ namespace LolAccountManager
             if (account == null) return;
 
             UsernameTextBox.Text = account.Username;
-            PasswordBox.Text = account.Password;
         }
 
         public Account Account { get; private set; }
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(UsernameTextBox.Text) || string.IsNullOrWhiteSpace(PasswordBox.Text))
+            if (string.IsNullOrWhiteSpace(UsernameTextBox.Text))
             {
                 MessageBox.Show("Please enter both username and password.", "Error", MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
             else
             {
-                Account = new Account { Username = UsernameTextBox.Text, Password = PasswordBox.Text };
+                Account = new Account { Username = UsernameTextBox.Text };
                 DialogResult = true;
                 Close();
             }
