@@ -3,6 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-
+        <Style TargetType="Control">
+            <Setter Property="FontFamily" Value="JetBrains Mono" />
+            <Setter Property="FontSize" Value="12" />
+        </Style>
     </Application.Resources>
 </Application>

@@ -17,7 +17,6 @@ namespace LolAccountManager
         private const string RiotClientProcessName = "RiotClientServices";
         private const string LeagueOfLegendsProcessName = "LeagueClient";
         private ObservableCollection<Account> _accounts;
-
         public MainWindow()
         {
             InitializeComponent();
@@ -95,22 +94,20 @@ namespace LolAccountManager
 
         private void Connect_Click(object sender, RoutedEventArgs e)
         {
-            if (AccountListView.SelectedItem != null)
-            {
-                KillRiotRelatedProcesses();
+            if (AccountListView.SelectedItem == null) return;
+            KillRiotRelatedProcesses();
 
-                // replace the RiotGamesPrivateSettings.yaml file whis the selected account
-                var accountFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                    LolAccountManagerFolder, (AccountListView.SelectedItem as Account).Username);
-                var sourceFilePath = Path.Combine(accountFolderPath, RiotGamesPrivateSettingsFile);
-                var destinationFilePath =
-                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                        "Riot Games", "Riot Client", "Data", RiotGamesPrivateSettingsFile);
-                File.Copy(sourceFilePath, destinationFilePath, true);
+            // replace the RiotGamesPrivateSettings.yaml file whis the selected account
+            var accountFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                LolAccountManagerFolder, (AccountListView.SelectedItem as Account)?.Username);
+            var sourceFilePath = Path.Combine(accountFolderPath, RiotGamesPrivateSettingsFile);
+            var destinationFilePath =
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    "Riot Games", "Riot Client", "Data", RiotGamesPrivateSettingsFile);
+            File.Copy(sourceFilePath, destinationFilePath, true);
 
-                // start the client C:\Riot Games\League of Legends
-                StartLeagueOfLegends();
-            }
+            // start the client C:\Riot Games\League of Legends
+            StartLeagueOfLegends();
         }
 
         private void Disconnect()
@@ -140,10 +137,38 @@ namespace LolAccountManager
             e.Handled = true;
         }
 
-        private void CopyUsername_Click(object sender, RoutedEventArgs e)
+        private void OpenAccountFolder_Click(object sender, RoutedEventArgs e)
         {
-            if (AccountListView.SelectedItem != null)
-                Clipboard.SetText((AccountListView.SelectedItem as Account).Username);
+            if (AccountListView.SelectedItem == null) return;
+            var accountFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                LolAccountManagerFolder, (AccountListView.SelectedItem as Account).Username);
+            Process.Start(accountFolderPath);
+        }
+
+
+        private DateTime _lastClickTime = DateTime.MinValue;
+
+        private void AccountListViewItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var now = DateTime.Now;
+            var timeSinceLastClick = now - _lastClickTime;
+
+            if (timeSinceLastClick.TotalMilliseconds <= 300)
+            {
+                if (sender is ListViewItem listViewItem)
+                {
+                    if (listViewItem.DataContext is Account item)
+                    {
+                        Connect_Click(sender, e);
+                    }
+                }
+
+                _lastClickTime = DateTime.MinValue;
+            }
+            else
+            {
+                _lastClickTime = now;
+            }
         }
     }
 
