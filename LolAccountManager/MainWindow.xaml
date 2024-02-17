@@ -6,8 +6,9 @@
         mc:Ignorable="d"
         Title="LoL Account Manager" Height="400" Width="675"
         ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen"
-        WindowStyle="SingleBorderWindow" ShowInTaskbar="True"
-        Background="#150942" Foreground="White">
+        WindowStyle="None" ShowInTaskbar="True"
+        AllowsTransparency="True"
+        Background="Transparent" Foreground="White">
 
     <Window.Resources>
         <Style x:Key="DarkButtonStyle" TargetType="Button">
@@ -53,8 +54,118 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="ExitButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF5755" />
+            <Setter Property="Foreground" Value="#9A0001" />
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1" CornerRadius="100">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation
+                                                Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                                To="#FF3F3D" Duration="0:0:0.2" />
+                                            <ColorAnimation
+                                                Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"
+                                                To="#9A0001" Duration="0:0:0.2" />
+                                            <DoubleAnimation
+                                                Storyboard.TargetProperty="FontSize"
+                                                To="25" Duration="0:0:0.2" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation
+                                                Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                                To="#FF5755" Duration="0:0:0.2" />
+                                            <ColorAnimation
+                                                Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"
+                                                To="#9A0001" Duration="0:0:0.2" />
+                                            <DoubleAnimation
+                                                Storyboard.TargetProperty="FontSize"
+                                                To="14" Duration="0:0:0.2" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="MinimizeButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FEBD2F" />
+            <Setter Property="Foreground" Value="#AA5600" />
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1" CornerRadius="100">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation
+                                                Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                                To="#FFD04E" Duration="0:0:0.2" />
+                                            <ColorAnimation
+                                                Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"
+                                                To="#AA5600" Duration="0:0:0.2" />
+                                            <DoubleAnimation
+                                                Storyboard.TargetProperty="FontSize"
+                                                To="25" Duration="0:0:0.2" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation
+                                                Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                                To="#FEBD2F" Duration="0:0:0.2" />
+                                            <ColorAnimation
+                                                Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"
+                                                To="#AA5600" Duration="0:0:0.2" />
+                                            <DoubleAnimation
+                                                Storyboard.TargetProperty="FontSize"
+                                                To="14" Duration="0:0:0.2" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style x:Key="OrangeButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="#eb5f3b" />
+            <Setter Property="Background" Value="#9A0001" />
             <Setter Property="Foreground" Value="White" />
             <Setter Property="Padding" Value="20" />
             <Setter Property="Margin" Value="5" />
@@ -77,7 +188,7 @@
                                         <Storyboard>
                                             <ColorAnimation
                                                 Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
-                                                To="#ec7252" Duration="0:0:0.2" />
+                                                To="#FF3F3D" Duration="0:0:0.2" />
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </Trigger.EnterActions>
@@ -86,7 +197,7 @@
                                         <Storyboard>
                                             <ColorAnimation
                                                 Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
-                                                To="#eb5f3b" Duration="0:0:0.2" />
+                                                To="#9A0001" Duration="0:0:0.2" />
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </Trigger.ExitActions>
@@ -97,8 +208,8 @@
             </Setter>
         </Style>
         <Style x:Key="ScrollBarThumb" TargetType="Thumb">
-            <Setter Property="Background" Value="#f57a52" />
-            <Setter Property="BorderBrush" Value="#f57a52" />
+            <Setter Property="Background" Value="#3F8132" />
+            <Setter Property="BorderBrush" Value="#3F8132" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Width" Value="10" />
             <Setter Property="Cursor" Value="Hand" />
@@ -112,7 +223,7 @@
                                         <Storyboard>
                                             <ColorAnimation
                                                 Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
-                                                To="#e8623f" Duration="0:0:0.2" />
+                                                To="#321880" Duration="0:0:0.2" />
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </Trigger.EnterActions>
@@ -121,7 +232,7 @@
                                         <Storyboard>
                                             <ColorAnimation
                                                 Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
-                                                To="#f57a52" Duration="0:0:0.2" />
+                                                To="#3F8132" Duration="0:0:0.2" />
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </Trigger.ExitActions>
@@ -134,29 +245,35 @@
             </Setter>
         </Style>
     </Window.Resources>
-    <Grid Background="#150942">
-        <TabPanel Margin="0,0,0,50" HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="Auto" Height="Auto" Background="#201354">
+    <Grid Background="Transparent" MouseLeftButtonDown="OnDraggableTabPanelMouseDown">
+        <Border Background="#11092e" CornerRadius="20" Margin="0,0,0,0" BorderThickness="0,0,0,5"
+                BorderBrush="#3F8132" />
+        <TabPanel Margin="0,0,0,50" HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="Auto" Height="Auto"
+                  Background="Transparent" x:Name="DraggableTabPanel"
+                  MouseLeftButtonDown="OnDraggableTabPanelMouseDown">
             <TabPanel.Resources>
                 <Style TargetType="TabItem">
-                    <Setter Property="Background" Value="#150942" />
+                    <Setter Property="Background" Value="#110638" />
                     <Setter Property="Foreground" Value="White" />
                     <Setter Property="Padding" Value="10" />
                     <Setter Property="FontSize" Value="14" />
                     <Setter Property="FontWeight" Value="Bold" />
                     <Setter Property="BorderBrush" Value="#3F8132" />
-                    <Setter Property="BorderThickness" Value="0,0,0,4" />
+                    <Setter Property="BorderThickness" Value="0,0,0,2" />
                     <Setter Property="Cursor" Value="Hand" />
-                    <Setter Property="Width" Value="150" />
+                    <Setter Property="Width" Value="140" />
                     <Setter Property="Height" Value="50" />
                     <Setter Property="HorizontalAlignment" Value="Center" />
                     <Setter Property="VerticalAlignment" Value="Center" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="TabItem">
-                                <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
-                                        BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="0"
+                                <Border Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="10,10,0,0"
                                         Padding="{TemplateBinding Padding}">
-                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Content="{TemplateBinding Header}" />
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                      Content="{TemplateBinding Header}" />
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
@@ -174,7 +291,7 @@
                                                 <Storyboard>
                                                     <ColorAnimation
                                                         Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
-                                                        To="#150942" Duration="0:0:0.2" />
+                                                        To="#110638" Duration="0:0:0.2" />
                                                 </Storyboard>
                                             </BeginStoryboard>
                                         </Trigger.ExitActions>
@@ -186,16 +303,37 @@
                 </Style>
             </TabPanel.Resources>
             <TabItem Header="Settings" />
-
+            <TabItem Header="Help" />
+            <TabItem Header="About" />
         </TabPanel>
-        <Image Source="Resources/Icon.ico" HorizontalAlignment="Right" Height="200" Width="200" Margin="0,40,20,0" RenderTransformOrigin="0.5,0.5"
-               VerticalAlignment="Top">
-            <Image.RenderTransform>
-                <ScaleTransform ScaleX="-1"/>
-            </Image.RenderTransform>
-        </Image>
+        <Button Content="X" HorizontalAlignment="Right" Click="Close_Click" Style="{StaticResource ExitButtonStyle}"
+                Width="40" Height="40" VerticalAlignment="Top" Margin="0,5,10,0" />
+        <Button Content="━" HorizontalAlignment="Right" Click="Minimize_Click"
+                Style="{StaticResource MinimizeButtonStyle}" Width="40" Height="40" VerticalAlignment="Top"
+                Margin="0,5,60,0" />
+        <Canvas HorizontalAlignment="Right" VerticalAlignment="Top" Width="200" Height="200" Margin="0,50,20,0">
+            <Image x:Name="AnimatedImage" Source="Resources/Icon.ico" HorizontalAlignment="Right" Height="200"
+                   Width="200" RenderTransformOrigin="0.5,0.5">
+                <Image.RenderTransform>
+                    <ScaleTransform ScaleX="-1" />
+                </Image.RenderTransform>
+                <Image.Triggers>
+                    <EventTrigger RoutedEvent="Image.Loaded">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation
+                                    Storyboard.TargetName="AnimatedImage"
+                                    Storyboard.TargetProperty="(Canvas.Top)"
+                                    From="0" To="25" Duration="0:0:4" AutoReverse="True" RepeatBehavior="Forever" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Image.Triggers>
+            </Image>
+        </Canvas>
         <ListView Name="AccountListView" Margin="20,80,0,40" HorizontalAlignment="Left" VerticalAlignment="Stretch"
-                  Background="#220F58" Foreground="White" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                  Background="#100729" Foreground="White" BorderThickness="0"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto">
             <ListView.Resources>
                 <Style x:Key="ContextMenuStyle" TargetType="ContextMenu">
                     <Setter Property="Background" Value="#150942" />
@@ -209,7 +347,8 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="ContextMenu">
-                                <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                <Border Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
                                         BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="0,4,4,0"
                                         Padding="{TemplateBinding Padding}">
                                     <ItemsPresenter />
@@ -230,10 +369,12 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="MenuItem">
-                                <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                <Border Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
                                         BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="0,4,4,0"
                                         Padding="{TemplateBinding Padding}">
-                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Content="{TemplateBinding Header}" />
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                      Content="{TemplateBinding Header}" />
                                 </Border>
                             </ControlTemplate>
                         </Setter.Value>
@@ -252,10 +393,12 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="MenuItem">
-                                <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                <Border Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
                                         BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="0,4,4,0"
                                         Padding="{TemplateBinding Padding}">
-                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Content="{TemplateBinding Header}" />
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                      Content="{TemplateBinding Header}" />
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
@@ -285,9 +428,14 @@
                 </Style>
                 <ContextMenu x:Key="ItemContextMenu" Style="{StaticResource ContextMenuStyle}">
                     <MenuItem Header="{Binding Path=Username}" Style="{StaticResource ItemContextTitleStyle}" />
-                    <MenuItem Header="Connect to Account" Click="Connect_Click" Style="{StaticResource ItemContextMenuStyle}" />
-                    <MenuItem Header="Open in Folder" Click="OpenAccountFolder_Click" Style="{StaticResource ItemContextMenuStyle}" />
-                    <MenuItem Header="Delete Account" Click="DeleteAccount_Click" Style="{StaticResource ItemContextMenuStyle}" />
+                    <MenuItem Header="Connect to Account" Click="Connect_Click"
+                              Style="{StaticResource ItemContextMenuStyle}" />
+                    <MenuItem Header="Refresh Account" Click="RefreshAccount_Click"
+                              Style="{StaticResource ItemContextMenuStyle}" />
+                    <MenuItem Header="Open in Folder" Click="OpenAccountFolder_Click"
+                              Style="{StaticResource ItemContextMenuStyle}" />
+                    <MenuItem Header="Delete Account" Click="DeleteAccount_Click"
+                              Style="{StaticResource ItemContextMenuStyle}" />
                 </ContextMenu>
                 <Style TargetType="ScrollBar">
                     <Setter Property="Template">
@@ -305,8 +453,9 @@
             </ListView.Resources>
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
-                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="AccountListViewItem_PreviewMouseLeftButtonDown" />
-                    <Setter Property="Background" Value="#180d42" />
+                    <EventSetter Event="PreviewMouseLeftButtonDown"
+                                 Handler="AccountListViewItem_PreviewMouseLeftButtonDown" />
+                    <Setter Property="Background" Value="#130c30" />
                     <Setter Property="Foreground" Value="White" />
                     <Setter Property="Padding" Value="10" />
                     <Setter Property="Margin" Value="5" />
@@ -339,7 +488,7 @@
                                                 <Storyboard>
                                                     <ColorAnimation
                                                         Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
-                                                        To="#180d42" Duration="0:0:0.2" />
+                                                        To="#130c30" Duration="0:0:0.2" />
                                                 </Storyboard>
                                             </BeginStoryboard>
                                         </Trigger.ExitActions>
@@ -354,12 +503,12 @@
                 <GridView AllowsColumnReorder="False">
                     <GridView.ColumnHeaderContainerStyle>
                         <Style TargetType="GridViewColumnHeader">
-                            <Setter Property="Background" Value="#150942" />
+                            <Setter Property="Background" Value="#110638" />
                             <Setter Property="Foreground" Value="White" />
                             <Setter Property="Padding" Value="10" />
-                            <Setter Property="Margin" Value="5,0,5,0" />
+                            <Setter Property="Margin" Value="5,5,5,0" />
                             <Setter Property="BorderBrush" Value="#3F8132" />
-                            <Setter Property="BorderThickness" Value="0,0,0,4" />
+                            <Setter Property="BorderThickness" Value="2,2,2,2" />
                             <Setter Property="FontSize" Value="14" />
                             <Setter Property="FontWeight" Value="Bold" />
                             <Setter Property="IsHitTestVisible" Value="False" />
@@ -369,6 +518,7 @@
                                         <Border Background="{TemplateBinding Background}"
                                                 BorderBrush="{TemplateBinding BorderBrush}"
                                                 BorderThickness="{TemplateBinding BorderThickness}"
+                                                CornerRadius="10,10,10,10"
                                                 Padding="{TemplateBinding Padding}">
                                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                                         </Border>
@@ -382,7 +532,7 @@
             </ListView.View>
         </ListView>
 
-        <Grid VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="200"  Margin="0,0,20,35">
+        <Grid VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="200" Margin="0,0,20,35">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />

@@ -95,7 +95,7 @@
         <None Include="packages.config"/>
     </ItemGroup>
     <ItemGroup>
-        <Content Include="Resources\Font\JetBrainsMono-Bold.ttf" />
+        <Content Include="Resources\Font\JetBrainsMono-Bold.ttf"/>
         <Content Include="Resources\Icon.ico"/>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>

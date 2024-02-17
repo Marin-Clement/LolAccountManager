@@ -17,11 +17,13 @@ namespace LolAccountManager
         private const string RiotClientProcessName = "RiotClientServices";
         private const string LeagueOfLegendsProcessName = "LeagueClient";
         private ObservableCollection<Account> _accounts;
+
+        private DateTime _lastClickTime = DateTime.MinValue;
+
         public MainWindow()
         {
             InitializeComponent();
 
-            // create in MyDocuments/LolAccountManager
             if (!Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                     LolAccountManagerFolder)))
                 Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
@@ -30,6 +32,22 @@ namespace LolAccountManager
             LoadAccounts();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             AccountListView.ItemsSource = _accounts;
+        }
+
+        private void OnDraggableTabPanelMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed) DragMove();
+        }
+
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+
+            Close();
+        }
+
+        private void Minimize_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
         }
 
         private void LoadAccounts()
@@ -49,6 +67,12 @@ namespace LolAccountManager
             }
         }
 
+        private void Refresh_List()
+        {
+            LoadAccounts();
+            AccountListView.ItemsSource = _accounts;
+        }
+
         private void SaveAccount(Account account)
         {
             var accountFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
@@ -64,11 +88,24 @@ namespace LolAccountManager
 
         private void AddAccount_Click(object sender, RoutedEventArgs e)
         {
-            var addAccountWindow = new AddModifyAccountWindow();
+            var addAccountWindow = new AddModifyAccountWindow
+            {
+                Owner = this
+            };
+
             if (addAccountWindow.ShowDialog() != true) return;
             _accounts.Add(addAccountWindow.Account);
             Console.WriteLine(addAccountWindow.Account.Username);
             SaveAccount(addAccountWindow.Account);
+            KillRiotRelatedProcesses();
+            Disconnect();
+            StartLeagueOfLegends();
+        }
+
+
+        private void RefreshAccount_Click(object sender, RoutedEventArgs e)
+        {
+            SaveAccount(AccountListView.SelectedItem as Account);
             KillRiotRelatedProcesses();
             Disconnect();
             StartLeagueOfLegends();
@@ -145,9 +182,6 @@ namespace LolAccountManager
             Process.Start(accountFolderPath);
         }
 
-
-        private DateTime _lastClickTime = DateTime.MinValue;
-
         private void AccountListViewItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var now = DateTime.Now;
@@ -156,12 +190,8 @@ namespace LolAccountManager
             if (timeSinceLastClick.TotalMilliseconds <= 300)
             {
                 if (sender is ListViewItem listViewItem)
-                {
                     if (listViewItem.DataContext is Account item)
-                    {
                         Connect_Click(sender, e);
-                    }
-                }
 
                 _lastClickTime = DateTime.MinValue;
             }

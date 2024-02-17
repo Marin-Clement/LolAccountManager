@@ -8,11 +8,15 @@ namespace LolAccountManager
         public AddModifyAccountWindow(Account account = null)
         {
             InitializeComponent();
-            WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
             if (account == null) return;
 
             UsernameTextBox.Text = account.Username;
+        }
+
+        private void OnDraggableTabPanelMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed) DragMove();
         }
 
         public Account Account { get; private set; }
@@ -21,7 +25,7 @@ namespace LolAccountManager
         {
             if (string.IsNullOrWhiteSpace(UsernameTextBox.Text))
             {
-                MessageBox.Show("Please enter both username and password.", "Error", MessageBoxButton.OK,
+                MessageBox.Show("Please enter both username", "Error", MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
             else
