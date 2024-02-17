@@ -55,26 +55,22 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <ApplicationDefinition Include="App.xaml">
-            <Generator>MSBuild:Compile</Generator>
-            <SubType>Designer</SubType>
-        </ApplicationDefinition>
-        <Page Include="AddModifyAccountWindow.xaml"/>
-        <Page Include="MainWindow.xaml">
-            <Generator>MSBuild:Compile</Generator>
-            <SubType>Designer</SubType>
-        </Page>
-        <Compile Include="AddModifyAccountWindow.xaml.cs">
-            <DependentUpon>AddModifyAccountWindow.xaml</DependentUpon>
-        </Compile>
         <Compile Include="App.xaml.cs">
-            <DependentUpon>App.xaml</DependentUpon>
-            <SubType>Code</SubType>
+          <DependentUpon>App.xaml</DependentUpon>
+          <SubType>Code</SubType>
         </Compile>
-        <Compile Include="MainWindow.xaml.cs">
-            <DependentUpon>MainWindow.xaml</DependentUpon>
-            <SubType>Code</SubType>
+        <Compile Include="View\AddModifyAccountWindow.xaml.cs">
+          <DependentUpon>AddModifyAccountWindow.xaml</DependentUpon>
         </Compile>
+        <Compile Include="View\MainWindow.xaml.cs">
+          <DependentUpon>MainWindow.xaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Page Include="View\AddModifyAccountWindow.xaml" />
+        <Page Include="View\MainWindow.xaml">
+          <Generator>MSBuild:Compile</Generator>
+          <SubType>Designer</SubType>
+        </Page>
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Properties\AssemblyInfo.cs">
@@ -97,6 +93,12 @@
     <ItemGroup>
         <Content Include="Resources\Font\JetBrainsMono-Bold.ttf"/>
         <Content Include="Resources\Icon.ico"/>
+    </ItemGroup>
+    <ItemGroup>
+      <ApplicationDefinition Include="App.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <SubType>Designer</SubType>
+      </ApplicationDefinition>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
 </Project>

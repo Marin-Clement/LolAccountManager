@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Navigation;
 
-namespace LolAccountManager
+namespace LolAccountManager.View
 {
     public partial class MainWindow
     {

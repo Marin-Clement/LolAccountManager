@@ -1,4 +1,4 @@
-﻿<Window x:Class="LolAccountManager.MainWindow"
+﻿<Window x:Class="LolAccountManager.View.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -308,11 +308,11 @@
         </TabPanel>
         <Button Content="X" HorizontalAlignment="Right" Click="Close_Click" Style="{StaticResource ExitButtonStyle}"
                 Width="40" Height="40" VerticalAlignment="Top" Margin="0,5,10,0" />
-        <Button Content="━" HorizontalAlignment="Right" Click="Minimize_Click"
+        <Button Content="🗕" HorizontalAlignment="Right" Click="Minimize_Click"
                 Style="{StaticResource MinimizeButtonStyle}" Width="40" Height="40" VerticalAlignment="Top"
                 Margin="0,5,60,0" />
         <Canvas HorizontalAlignment="Right" VerticalAlignment="Top" Width="200" Height="200" Margin="0,50,20,0">
-            <Image x:Name="AnimatedImage" Source="Resources/Icon.ico" HorizontalAlignment="Right" Height="200"
+            <Image x:Name="AnimatedImage" Source="../Resources/Icon.ico" HorizontalAlignment="Right" Height="200"
                    Width="200" RenderTransformOrigin="0.5,0.5">
                 <Image.RenderTransform>
                     <ScaleTransform ScaleX="-1" />
@@ -508,7 +508,7 @@
                             <Setter Property="Padding" Value="10" />
                             <Setter Property="Margin" Value="5,5,5,0" />
                             <Setter Property="BorderBrush" Value="#3F8132" />
-                            <Setter Property="BorderThickness" Value="2,2,2,2" />
+                            <Setter Property="BorderThickness" Value="0,0,0,2" />
                             <Setter Property="FontSize" Value="14" />
                             <Setter Property="FontWeight" Value="Bold" />
                             <Setter Property="IsHitTestVisible" Value="False" />

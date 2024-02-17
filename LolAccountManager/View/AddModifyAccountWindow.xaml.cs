@@ -1,7 +1,7 @@
 using System.Windows;
 using System.Windows.Input;
 
-namespace LolAccountManager
+namespace LolAccountManager.View
 {
     public partial class AddModifyAccountWindow
     {
