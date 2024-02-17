@@ -10,6 +10,15 @@
         AllowsTransparency="True"
         Background="Transparent" Foreground="White">
 
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.5" />
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
     <Window.Resources>
         <Style x:Key="DarkButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#23105D" />
@@ -302,9 +311,9 @@
                     </Setter>
                 </Style>
             </TabPanel.Resources>
-            <TabItem Header="Settings" />
-            <TabItem Header="Help" />
-            <TabItem Header="About" />
+            <TabItem Header="User Guide" PreviewMouseLeftButtonDown="HelpTab_Click" />
+            <TabItem Header="Settings" PreviewMouseLeftButtonDown="SettingsTab_Click" />
+            <TabItem Header="About" PreviewMouseLeftButtonDown="AboutTab_Click" />
         </TabPanel>
         <Button Content="X" HorizontalAlignment="Right" Click="Close_Click" Style="{StaticResource ExitButtonStyle}"
                 Width="40" Height="40" VerticalAlignment="Top" Margin="0,5,10,0" />

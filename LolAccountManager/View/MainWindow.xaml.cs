@@ -5,7 +5,6 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Navigation;
 
 namespace LolAccountManager.View
 {
@@ -41,7 +40,6 @@ namespace LolAccountManager.View
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {
-
             Close();
         }
 
@@ -65,12 +63,6 @@ namespace LolAccountManager.View
                     if (file.EndsWith(RiotGamesPrivateSettingsFile))
                         _accounts.Add(new Account { Username = Path.GetFileName(accountFolder) });
             }
-        }
-
-        private void Refresh_List()
-        {
-            LoadAccounts();
-            AccountListView.ItemsSource = _accounts;
         }
 
         private void SaveAccount(Account account)
@@ -116,7 +108,7 @@ namespace LolAccountManager.View
             if (AccountListView.SelectedItem != null)
             {
                 var accountFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                    LolAccountManagerFolder, (AccountListView.SelectedItem as Account).Username);
+                    LolAccountManagerFolder, ((Account)AccountListView.SelectedItem).Username);
                 Directory.Delete(accountFolderPath, true);
                 _accounts.Remove(AccountListView.SelectedItem as Account);
             }
@@ -134,9 +126,8 @@ namespace LolAccountManager.View
             if (AccountListView.SelectedItem == null) return;
             KillRiotRelatedProcesses();
 
-            // replace the RiotGamesPrivateSettings.yaml file whis the selected account
             var accountFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                LolAccountManagerFolder, (AccountListView.SelectedItem as Account)?.Username);
+                LolAccountManagerFolder, (AccountListView.SelectedItem as Account)?.Username ?? string.Empty);
             var sourceFilePath = Path.Combine(accountFolderPath, RiotGamesPrivateSettingsFile);
             var destinationFilePath =
                 Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
@@ -147,7 +138,7 @@ namespace LolAccountManager.View
             StartLeagueOfLegends();
         }
 
-        private void Disconnect()
+        private static void Disconnect()
         {
             // delete the RiotGamesPrivateSettings.yaml file
             var destinationFilePath =
@@ -156,29 +147,23 @@ namespace LolAccountManager.View
             File.Delete(destinationFilePath);
         }
 
-        private void KillRiotRelatedProcesses()
+        private static void KillRiotRelatedProcesses()
         {
             foreach (var process in Process.GetProcessesByName(LeagueOfLegendsProcessName)) process.Kill();
 
             foreach (var process in Process.GetProcessesByName(RiotClientProcessName)) process.Kill();
         }
 
-        private void StartLeagueOfLegends()
+        private static void StartLeagueOfLegends()
         {
             Process.Start("C:\\Riot Games\\League of Legends\\LeagueClient.exe");
-        }
-
-        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
-        {
-            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
-            e.Handled = true;
         }
 
         private void OpenAccountFolder_Click(object sender, RoutedEventArgs e)
         {
             if (AccountListView.SelectedItem == null) return;
             var accountFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                LolAccountManagerFolder, (AccountListView.SelectedItem as Account).Username);
+                LolAccountManagerFolder, ((Account)AccountListView.SelectedItem).Username);
             Process.Start(accountFolderPath);
         }
 
@@ -190,7 +175,7 @@ namespace LolAccountManager.View
             if (timeSinceLastClick.TotalMilliseconds <= 300)
             {
                 if (sender is ListViewItem listViewItem)
-                    if (listViewItem.DataContext is Account item)
+                    if (listViewItem.DataContext is Account)
                         Connect_Click(sender, e);
 
                 _lastClickTime = DateTime.MinValue;
@@ -199,6 +184,33 @@ namespace LolAccountManager.View
             {
                 _lastClickTime = now;
             }
+        }
+
+        private void SettingsTab_Click(object sender, MouseButtonEventArgs e)
+        {
+            var settingsWindow = new SettingsWindow
+            {
+                Owner = this
+            };
+            settingsWindow.ShowDialog();
+        }
+
+        private void HelpTab_Click(object sender, MouseButtonEventArgs e)
+        {
+            var helpWindow = new HelpWindow
+            {
+                Owner = this
+            };
+            helpWindow.ShowDialog();
+        }
+
+        private void AboutTab_Click(object sender, MouseButtonEventArgs e)
+        {
+            var aboutWindow = new AboutWindow
+            {
+                Owner = this
+            };
+            aboutWindow.ShowDialog();
         }
     }
 

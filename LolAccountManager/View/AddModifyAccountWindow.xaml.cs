@@ -14,12 +14,12 @@ namespace LolAccountManager.View
             UsernameTextBox.Text = account.Username;
         }
 
+        public Account Account { get; private set; }
+
         private void OnDraggableTabPanelMouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed) DragMove();
         }
-
-        public Account Account { get; private set; }
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
