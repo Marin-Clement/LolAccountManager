@@ -55,13 +55,13 @@ namespace LolAccountManager.View
             _taskbarIcon.ContextMenu = new ContextMenu { Style = (Style)FindResource("CustomContextMenuStyle") };
 
             // Add a "Show" menu item
-            var showMenuItem = new MenuItem { Header = "Show", Style = (Style)FindResource("CustomMenuItemStyle"), Width = 60, FontSize = 10, Height = 30 };
+            var showMenuItem = new MenuItem { Header = "Show", Style = (Style)FindResource("CustomMenuItemStyle"), Width = 100, FontSize = 14 };
             showMenuItem.Click += (o, eventArgs) => ShowMainWindow();
             _taskbarIcon.ContextMenu.Items.Add(showMenuItem);
 
 
             // Add a "Close" menu item with the custom style
-            var closeMenuItem = new MenuItem { Header = "Close", Style = (Style)FindResource("CustomMenuItemStyle"), Width = 60, FontSize = 10, Height = 30 };
+            var closeMenuItem = new MenuItem { Header = "Close", Style = (Style)FindResource("CustomMenuItemStyle"), Width = 100, FontSize = 14 };
             closeMenuItem.Click += (o, eventArgs) => CloseApplication_Click();
             _taskbarIcon.ContextMenu.Items.Add(closeMenuItem);
         }
@@ -75,7 +75,6 @@ namespace LolAccountManager.View
 
         private void ShowMainWindow()
         {
-            Console.WriteLine("ShowMainWindow");
             Show();
             if (WindowState == WindowState.Minimized)
             {

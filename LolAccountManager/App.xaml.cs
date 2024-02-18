@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
+using LolAccountManager.View;
 using Newtonsoft.Json;
 
 namespace LolAccountManager
@@ -10,6 +11,24 @@ namespace LolAccountManager
         private App()
         {
             Application_Startup();
+        }
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            bool startHidden = e.Args.Length > 0 && e.Args[0] == "/startHidden";
+
+            if (startHidden)
+            {
+                MainWindow = new MainWindow();
+                MainWindow.Hide();
+            }
+            else
+            {
+                MainWindow = new MainWindow();
+                MainWindow.Show();
+            }
         }
 
         private void Application_Startup()

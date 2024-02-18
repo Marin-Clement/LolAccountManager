@@ -85,8 +85,13 @@ namespace LolAccountManager.View
         private void StartWithWindows_Checked()
         {
             var registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-            registryKey?.SetValue("LolAccountManager", System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+            // Include an argument when adding to startup
+            string startupCommand = $"\"{System.Reflection.Assembly.GetExecutingAssembly().Location}\" /startHidden";
+
+            registryKey?.SetValue("LolAccountManager", startupCommand);
         }
+
 
         private void StartWithWindows_Unchecked()
         {
