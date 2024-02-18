@@ -7,6 +7,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
+using Hardcodet.Wpf.TaskbarNotification;
 using Newtonsoft.Json;
 using static System.Windows.Media.ColorConverter;
 
@@ -14,6 +16,7 @@ namespace LolAccountManager.View
 {
     public partial class MainWindow
     {
+        private TaskbarIcon _taskbarIcon;
 
         public bool IsFirstRun { get; set; }
         private static string _lolAccountManagerFolder;
@@ -28,12 +31,58 @@ namespace LolAccountManager.View
         {
             LoadAppConfig();
             InitializeComponent();
+            InitializeTaskbarIcon();
             if (IsFirstRun) PlayIntroAnimation(HelpTab);
             DataContext = this;
 
             LoadAccounts();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             AccountListView.ItemsSource = _accounts;
+        }
+
+        private void InitializeTaskbarIcon()
+        {
+            _taskbarIcon = new TaskbarIcon
+            {
+                IconSource = new BitmapImage(new Uri("pack://application:,,,/LolAccountManager;component/Resources/IconTaskbar.ico")),
+                ToolTipText = "Lol Account Manager",
+                Visibility = Visibility.Visible
+            };
+
+            _taskbarIcon.TrayMouseDoubleClick += (sender, args) => ShowMainWindow();
+
+            // Adding a right-click context menu with a custom style
+            _taskbarIcon.ContextMenu = new ContextMenu { Style = (Style)FindResource("CustomContextMenuStyle") };
+
+            // Add a "Show" menu item
+            var showMenuItem = new MenuItem { Header = "Show", Style = (Style)FindResource("CustomMenuItemStyle"), Width = 60, FontSize = 10, Height = 30 };
+            showMenuItem.Click += (o, eventArgs) => ShowMainWindow();
+            _taskbarIcon.ContextMenu.Items.Add(showMenuItem);
+
+
+            // Add a "Close" menu item with the custom style
+            var closeMenuItem = new MenuItem { Header = "Close", Style = (Style)FindResource("CustomMenuItemStyle"), Width = 60, FontSize = 10, Height = 30 };
+            closeMenuItem.Click += (o, eventArgs) => CloseApplication_Click();
+            _taskbarIcon.ContextMenu.Items.Add(closeMenuItem);
+        }
+
+        private void CloseApplication_Click()
+        {
+            _taskbarIcon.Dispose();
+            Application.Current.Shutdown();
+        }
+
+
+        private void ShowMainWindow()
+        {
+            Console.WriteLine("ShowMainWindow");
+            Show();
+            if (WindowState == WindowState.Minimized)
+            {
+                WindowState = WindowState.Normal;
+            }
+
+            Activate();
         }
 
         private void LoadAppConfig()
@@ -88,13 +137,15 @@ namespace LolAccountManager.View
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {
-            Close();
+            Hide();
         }
 
         private void Minimize_Click(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
+            ShowInTaskbar = true;
         }
+
 
         private void LoadAccounts()
         {

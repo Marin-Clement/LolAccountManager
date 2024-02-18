@@ -20,6 +20,71 @@
         </EventTrigger>
     </Window.Triggers>
     <Window.Resources>
+        <Style x:Key="CustomContextMenuStyle" TargetType="ContextMenu">
+            <Setter Property="Background" Value="#110638"/>
+            <Setter Property="Opacity" Value="0.9"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="BorderBrush" Value="#3F8132"/>
+            <Setter Property="BorderThickness" Value="0,0,0,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ContextMenu">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="10,10,10,10"
+                                Padding="{TemplateBinding Padding}">
+                            <ItemsPresenter />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="CustomMenuItemStyle" TargetType="MenuItem">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#23105D"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="BorderBrush" Value="#3F8132"/>
+            <Setter Property="BorderThickness" Value="0,0,0,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="MenuItem">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="10,10,10,10"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Content="{TemplateBinding Header}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation
+                                                Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                                To="#321880" Duration="0:0:0.2" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation
+                                                Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                                To="#23105D" Duration="0:0:0.2" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style x:Key="DarkButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#23105D" />
             <Setter Property="Foreground" Value="White" />

@@ -37,6 +37,9 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="Hardcodet.NotifyIcon.Wpf, Version=1.1.0.0, Culture=neutral, PublicKeyToken=682384a853a08aad, processorArchitecture=MSIL">
+          <HintPath>..\packages\Hardcodet.NotifyIcon.Wpf.1.1.0\lib\net462\Hardcodet.NotifyIcon.Wpf.dll</HintPath>
+        </Reference>
         <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
             <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
         </Reference>
@@ -102,7 +105,8 @@
     <ItemGroup>
         <Content Include="Resources\Font\JetBrainsMono-Bold.ttf"/>
         <Content Include="Resources\HelpWindow\HelpWindowScreenshot1.png" />
-        <Content Include="Resources\Icon.ico"/>
+        <Content Include="Resources\Icon.ico" />
+        <Resource Include="Resources\IconTaskBar.ico" />
     </ItemGroup>
     <ItemGroup>
         <ApplicationDefinition Include="App.xaml">
