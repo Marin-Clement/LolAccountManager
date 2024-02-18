@@ -41,7 +41,12 @@ namespace LolAccountManager.View
             {
                 Description = "Never Disconnect the account from the client. If you want to disconnect the account use the Disconnect button in the manager or simply exit the client.",
                 Path = "pack://application:,,,/LolAccountManager;component/Resources/HelpWindow/HelpWindowScreenshot5.png"
-            }
+            },
+            new ScreenshotInfo
+            {
+                Description = "Before you close UserGuide, go to the settings and set the path to the League of Legends client. (If you have not done this already)",
+                Path = "pack://application:,,,/LolAccountManager;component/Resources/HelpWindow/HelpWindowScreenshot6.png"
+            },
         };
 
         private int _currentScreenshotIndex;

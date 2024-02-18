@@ -109,6 +109,7 @@
         <Resource Include="Resources\HelpWindow\HelpWindowScreenshot3.png" />
         <Resource Include="Resources\HelpWindow\HelpWindowScreenshot4.png" />
         <Resource Include="Resources\HelpWindow\HelpWindowScreenshot5.png" />
+        <Resource Include="Resources\HelpWindow\HelpWindowScreenshot6.png" />
         <Content Include="Resources\Icon.ico" />
         <Resource Include="Resources\IconTaskBar.ico" />
     </ItemGroup>
