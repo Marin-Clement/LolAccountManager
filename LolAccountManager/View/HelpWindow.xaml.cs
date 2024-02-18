@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Animation;

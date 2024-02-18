@@ -17,28 +17,77 @@ namespace LolAccountManager.View
     public partial class MainWindow
     {
         private TaskbarIcon _taskbarIcon;
+        private bool _minimizeToTray;
+        private bool IsFirstRun { get; set; }
 
-        public bool IsFirstRun { get; set; }
         private static string _lolAccountManagerFolder;
         private static string _riotGamesPrivateSettingsFile;
         private static string _riotClientProcessName;
         private static string _leagueOfLegendsProcessName;
         private static string _leagueOfLegendsPath;
+
         private ObservableCollection<Account> _accounts;
+        private FileSystemWatcher _configFileWatcher;
+        private readonly System.Timers.Timer _configFileTimer = new System.Timers.Timer(200);
 
         private DateTime _lastClickTime = DateTime.MinValue;
 
         public MainWindow()
         {
-            LoadAppConfig();
             InitializeComponent();
+            LoadAppConfig();
+            InitializeConfigFileWatcher();
             InitializeTaskbarIcon();
             if (IsFirstRun) PlayIntroAnimation(HelpTab);
-            DataContext = this;
 
+            DataContext = this;
             LoadAccounts();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             AccountListView.ItemsSource = _accounts;
+
+            // Set up the timer
+            _configFileTimer.AutoReset = false;
+            _configFileTimer.Elapsed += (sender, args) => ConfigFileTimerElapsed();
+
+            // Event handlers
+            Loaded += (sender, args) => MainWindow_Loaded();
+            Closing += (sender, args) => MainWindow_Closing();
+        }
+
+        private void ConfigFileTimerElapsed()
+        {
+            // Handle the configuration file change after the debounce period
+            LoadAppConfig();
+        }
+
+        private void MainWindow_Loaded()
+        {
+            _configFileWatcher.EnableRaisingEvents = true;
+        }
+
+        private void MainWindow_Closing()
+        {
+            _configFileWatcher.EnableRaisingEvents = false;
+            _configFileWatcher.Dispose();
+        }
+
+        private void InitializeConfigFileWatcher()
+        {
+            _configFileWatcher = new FileSystemWatcher
+            {
+                Path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "LolAccountManager"),
+                Filter = "app-config.json",
+                NotifyFilter = NotifyFilters.LastWrite
+            };
+            _configFileWatcher.Changed += (sender, args) => ConfigFileWatcher_Changed();
+            _configFileWatcher.EnableRaisingEvents = true;
+        }
+
+        private void ConfigFileWatcher_Changed()
+        {
+            // Debounce the file change event
+            _configFileTimer.Stop();
+            _configFileTimer.Start();
         }
 
         private void InitializeTaskbarIcon()
@@ -88,11 +137,11 @@ namespace LolAccountManager.View
         private void LoadAppConfig()
         {
             var json = File.ReadAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                "LolAccountManager", "appconfig.json"));
+                "LolAccountManager", "app-config.json"));
             var appConfig = JsonConvert.DeserializeObject<AppConfig>(json);
             if (appConfig == null)
             {
-                throw new Exception("Failed to deserialize appconfig.json");
+                throw new Exception("Failed to deserialize app-config.json");
             }
             IsFirstRun = appConfig.FirstRun;
             _lolAccountManagerFolder = appConfig.LolAccountManagerFolder;
@@ -100,6 +149,7 @@ namespace LolAccountManager.View
             _riotClientProcessName = appConfig.RiotClientProcessName;
             _leagueOfLegendsProcessName = appConfig.LeagueOfLegendsProcessName;
             _leagueOfLegendsPath = appConfig.LeagueOfLegendsPath;
+            _minimizeToTray = appConfig.MinimizeToTray;
         }
 
         private void PlayIntroAnimation(TabItem tab)
@@ -108,7 +158,9 @@ namespace LolAccountManager.View
             {
                 RepeatBehavior = RepeatBehavior.Forever,
                 AutoReverse = true,
+                // ReSharper disable once PossibleNullReferenceException
                 From = (Color)ConvertFromString("#FFA500"),
+                // ReSharper disable once PossibleNullReferenceException
                 To = (Color)ConvertFromString("#110638"),
                 Duration = TimeSpan.FromSeconds(1)
             };
@@ -127,6 +179,7 @@ namespace LolAccountManager.View
 
         private void StopWelcomeAnimation(TabItem tab)
         {
+            // ReSharper disable once PossibleNullReferenceException
             tab.Background = new SolidColorBrush((Color)ConvertFromString("#110638"));
         }
 
@@ -138,7 +191,15 @@ namespace LolAccountManager.View
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {
-            Hide();
+            if (_minimizeToTray)
+            {
+                Hide();
+                ShowInTaskbar = false;
+            }
+            else
+            {
+                CloseApplication_Click();
+            }
         }
 
         private void Minimize_Click(object sender, RoutedEventArgs e)
@@ -297,14 +358,14 @@ namespace LolAccountManager.View
                 StopWelcomeAnimation(SettingsTab);
 
                 var json = File.ReadAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                    "LolAccountManager", "appconfig.json"));
+                    "LolAccountManager", "app-config.json"));
                 var appConfig = JsonConvert.DeserializeObject<AppConfig>(json);
                 appConfig.FirstRun = false;
                 IsFirstRun = appConfig.FirstRun;
 
                 var json2 = JsonConvert.SerializeObject(appConfig, Formatting.Indented);
                 File.WriteAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                    "LolAccountManager", "appconfig.json"), json2);
+                    "LolAccountManager", "app-config.json"), json2);
             }
             settingsWindow.ShowDialog();
         }

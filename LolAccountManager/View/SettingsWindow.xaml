@@ -127,15 +127,16 @@
                 BorderBrush="#3F8132" />
         <Label Content="Settings" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0" FontSize="24"
                FontWeight="Bold" Foreground="White" />
+        <Rectangle Height="3" Fill="#3F8132" Margin="0,60,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Top" />
+
 
         <!-- Wrap your StackPanel with a ScrollViewer -->
-        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,0,0,80">
-            <StackPanel Margin="20,60,20,60">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,70,0,80">
+            <StackPanel Margin="20,0,20,60">
                 <StackPanel.Resources>
                     <Style TargetType="Label">
                         <Setter Property="Foreground" Value="White" />
                         <Setter Property="FontSize" Value="16" />
-                        <Setter Property="Margin" Value="5" />
                     </Style>
                     <Style TargetType="TextBox">
                         <Setter Property="Background" Value="#321782" />
@@ -218,14 +219,29 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <Label Content="Start with Windows:" Grid.Column="1" VerticalAlignment="Center"
-                           HorizontalAlignment="Left" />
-                    <CheckBox x:Name="StartWithWindowsCheckBox" Style="{StaticResource CircleCheckbox}" Grid.Column="2">
-                        <CheckBox.LayoutTransform>
-                            <ScaleTransform ScaleX="1" ScaleY="1" />
-                        </CheckBox.LayoutTransform>
-                    </CheckBox>
+                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                        <Label Content="Start with Windows:" VerticalAlignment="Center"
+                               HorizontalAlignment="Left" />
+                        <CheckBox x:Name="StartWithWindowsCheckBox" Style="{StaticResource CircleCheckbox}">
+                            <CheckBox.LayoutTransform>
+                                <ScaleTransform ScaleX="1" ScaleY="1" />
+                            </CheckBox.LayoutTransform>
+                        </CheckBox>
+                    </StackPanel>
+                    <StackPanel Grid.Column="4" Orientation="Horizontal">
+                        <Rectangle Height="30" Width="3" Fill="White" Margin="8,0,5,0" />
+                        <Label Content="Minimize to tray:" VerticalAlignment="Center"
+                               HorizontalAlignment="Left" />
+                        <CheckBox x:Name="MinimizeToTrayCheckBox" Style="{StaticResource CircleCheckbox}">
+                            <CheckBox.LayoutTransform>
+                                <ScaleTransform ScaleX="1" ScaleY="1" />
+                            </CheckBox.LayoutTransform>
+                        </CheckBox>
+                    </StackPanel>
                 </Grid>
             </StackPanel>
         </ScrollViewer>

@@ -5,7 +5,7 @@ using Microsoft.Win32;
 
 namespace LolAccountManager.View
 {
-    public partial class SettingsWindow : Window
+    public partial class SettingsWindow
     {
         public SettingsWindow()
         {
@@ -17,8 +17,9 @@ namespace LolAccountManager.View
         {
             var appConfig = new AppConfig
             {
-                Version = "2.0.0",
+                Version = GetVersion(),
                 StartWithWindows = StartWithWindowsCheckBox.IsChecked == true,
+                MinimizeToTray = MinimizeToTrayCheckBox.IsChecked == true,
                 FirstRun = false,
                 RiotGamesPrivateSettingsFile = "RiotGamesPrivateSettings.yaml",
                 LolAccountManagerFolder = "LolAccountManager",
@@ -33,7 +34,7 @@ namespace LolAccountManager.View
             }
 
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(appConfig, Newtonsoft.Json.Formatting.Indented);
-            System.IO.File.WriteAllText(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), appConfig.LolAccountManagerFolder, "appconfig.json"), json);
+            System.IO.File.WriteAllText(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), appConfig.LolAccountManagerFolder, "app-config.json"), json);
 
             if (appConfig.StartWithWindows)
             {
@@ -46,16 +47,23 @@ namespace LolAccountManager.View
             ExitSettings_Click(null, null);
         }
 
+        private string GetVersion()
+        {
+            var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            return $"{version.Major}.{version.Minor}.{version.Build}";
+        }
+
         private void LoadSettings()
         {
-            var json = System.IO.File.ReadAllText(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "LolAccountManager", "appconfig.json"));
+            var json = System.IO.File.ReadAllText(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "LolAccountManager", "app-config.json"));
             var appConfig = Newtonsoft.Json.JsonConvert.DeserializeObject<AppConfig>(json);
             if (appConfig == null)
             {
-                throw new Exception("Failed to deserialize appconfig.json");
+                throw new Exception("Failed to deserialize app-config.json");
             }
             LeagueOfLegendsPathTextBox.Text = appConfig.LeagueOfLegendsPath;
             StartWithWindowsCheckBox.IsChecked = appConfig.StartWithWindows;
+            MinimizeToTrayCheckBox.IsChecked = appConfig.MinimizeToTray;
         }
 
         private void BrowseLeagueOfLegendsPath_Click(object sender, RoutedEventArgs e)

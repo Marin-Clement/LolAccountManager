@@ -1,13 +1,12 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Windows;
 using LolAccountManager.View;
 using Newtonsoft.Json;
 
 namespace LolAccountManager
 {
-    public partial class App : Application
+    public partial class App
     {
         private App()
         {
@@ -65,15 +64,36 @@ namespace LolAccountManager
         private void InitAppConfig()
         {
             var configFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                "LolAccountManager", "appconfig.json");
+                "LolAccountManager", "app-config.json");
 
+            AppConfig appConfig;
+
+            string json;
             if (File.Exists(configFilePath))
-                return;
-
-            var appConfig = new AppConfig
             {
-                Version = "2.0.0",
+                // check if version is outdated and update the file
+                json = File.ReadAllText(configFilePath);
+
+                if (json.Contains("Version"))
+                {
+                    appConfig = JsonConvert.DeserializeObject<AppConfig>(json);
+
+                    if (appConfig != null && appConfig.Version != GetAppVersion())
+                    {
+                        appConfig.Version = GetAppVersion();
+                        json = JsonConvert.SerializeObject(appConfig, Formatting.Indented);
+                        File.WriteAllText(configFilePath, json);
+                    }
+                    return;
+                }
+            }
+
+
+            appConfig = new AppConfig
+            {
+                Version = GetAppVersion(),
                 StartWithWindows = false,
+                MinimizeToTray = true,
                 FirstRun = true,
                 RiotGamesPrivateSettingsFile = "RiotGamesPrivateSettings.yaml",
                 LolAccountManagerFolder = "LolAccountManager",
@@ -87,11 +107,17 @@ namespace LolAccountManager
                 Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                     appConfig.LolAccountManagerFolder));
 
-            var json = JsonConvert.SerializeObject(appConfig, Formatting.Indented);
+            json = JsonConvert.SerializeObject(appConfig, Formatting.Indented);
             File.WriteAllText(configFilePath, json);
 
             // Log success or any additional information.
-            Console.WriteLine("Application configuration initialized successfully.");
+            Console.WriteLine(@"Application configuration initialized successfully.");
+        }
+
+        private string GetAppVersion()
+        {
+            var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            return $"{version.Major}.{version.Minor}.{version.Build}";
         }
     }
 
@@ -99,6 +125,7 @@ namespace LolAccountManager
     {
         public string Version { get; set; }
         public bool StartWithWindows { get; set; }
+        public bool MinimizeToTray { get; set; }
         public bool FirstRun { get; set; }
         public string RiotGamesPrivateSettingsFile { get; set; }
         public string LolAccountManagerFolder { get; set; }

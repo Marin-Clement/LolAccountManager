@@ -6,7 +6,7 @@ using System.Windows.Media.Animation;
 
 namespace LolAccountManager.View
 {
-    public partial class AboutWindow : Window
+    public partial class AboutWindow
     {
         public AboutWindow()
         {
@@ -16,11 +16,11 @@ namespace LolAccountManager.View
 
         private void LoadVersion()
         {
-            var json = System.IO.File.ReadAllText(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "LolAccountManager", "appconfig.json"));
+            var json = System.IO.File.ReadAllText(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "LolAccountManager", "app-config.json"));
             var appConfig = Newtonsoft.Json.JsonConvert.DeserializeObject<AppConfig>(json);
             if (appConfig == null)
             {
-                throw new Exception("Failed to deserialize appconfig.json");
+                throw new Exception("Failed to deserialize app-config.json");
             }
             var version = appConfig.Version;
             VersionLabel.Text = "Version: " + version;
