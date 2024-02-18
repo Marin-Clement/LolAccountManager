@@ -5,33 +5,81 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using Newtonsoft.Json;
+using static System.Windows.Media.ColorConverter;
 
 namespace LolAccountManager.View
 {
     public partial class MainWindow
     {
-        private const string LolAccountManagerFolder = "LolAccountManager";
-        private const string RiotGamesPrivateSettingsFile = "RiotGamesPrivateSettings.yaml";
 
-        private const string RiotClientProcessName = "RiotClientServices";
-        private const string LeagueOfLegendsProcessName = "LeagueClient";
+        public bool IsFirstRun { get; set; }
+        private static string _lolAccountManagerFolder;
+        private static string _riotGamesPrivateSettingsFile;
+        private static string _riotClientProcessName;
+        private static string _leagueOfLegendsProcessName;
         private ObservableCollection<Account> _accounts;
 
         private DateTime _lastClickTime = DateTime.MinValue;
 
         public MainWindow()
         {
+            LoadAppConfig();
             InitializeComponent();
-
-            if (!Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                    LolAccountManagerFolder)))
-                Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                    LolAccountManagerFolder));
+            if (IsFirstRun) PlayIntroAnimation(HelpTab);
+            DataContext = this;
 
             LoadAccounts();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             AccountListView.ItemsSource = _accounts;
         }
+
+        private void LoadAppConfig()
+        {
+            var json = File.ReadAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                "LolAccountManager", "appconfig.json"));
+            var appConfig = JsonConvert.DeserializeObject<AppConfig>(json);
+            if (appConfig == null)
+            {
+                throw new Exception("Failed to deserialize appconfig.json");
+            }
+            IsFirstRun = appConfig.FirstRun;
+            _lolAccountManagerFolder = appConfig.LolAccountManagerFolder;
+            _riotGamesPrivateSettingsFile = appConfig.RiotGamesPrivateSettingsFile;
+            _riotClientProcessName = appConfig.RiotClientProcessName;
+            _leagueOfLegendsProcessName = appConfig.LeagueOfLegendsProcessName;
+        }
+
+        private void PlayIntroAnimation(TabItem tab)
+        {
+            ColorAnimation colorAnimation = new ColorAnimation
+            {
+                RepeatBehavior = RepeatBehavior.Forever,
+                AutoReverse = true,
+                From = (Color)ConvertFromString("#FFA500"),
+                To = (Color)ConvertFromString("#110638"),
+                Duration = TimeSpan.FromSeconds(1)
+            };
+
+            Storyboard storyboard = new Storyboard();
+            storyboard.Children.Add(colorAnimation);
+
+            // Set the target property for the color animation
+            Storyboard.SetTarget(colorAnimation, tab);
+            Storyboard.SetTargetProperty(colorAnimation, new PropertyPath("(Border.Background).(SolidColorBrush.Color)"));
+
+            // Begin the animation
+            storyboard.Begin();
+        }
+
+
+        private void StopWelcomeAnimation(TabItem tab)
+        {
+            tab.Background = new SolidColorBrush((Color)ConvertFromString("#110638"));
+        }
+
 
         private void OnDraggableTabPanelMouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -55,12 +103,12 @@ namespace LolAccountManager.View
             // load from MyDocuments/LolAccountManager
             var accountFolders = Directory.GetDirectories(
                 Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                    LolAccountManagerFolder));
+                    _lolAccountManagerFolder));
             foreach (var accountFolder in accountFolders)
             {
                 var files = Directory.GetFiles(accountFolder);
                 foreach (var file in files)
-                    if (file.EndsWith(RiotGamesPrivateSettingsFile))
+                    if (file.EndsWith(_riotGamesPrivateSettingsFile))
                         _accounts.Add(new Account { Username = Path.GetFileName(accountFolder) });
             }
         }
@@ -68,12 +116,12 @@ namespace LolAccountManager.View
         private void SaveAccount(Account account)
         {
             var accountFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                LolAccountManagerFolder, account.Username);
+                _lolAccountManagerFolder, account.Username);
             if (!Directory.Exists(accountFolderPath)) Directory.CreateDirectory(accountFolderPath);
             // copy the RiotGamesPrivateSettings.yaml file to the account folder
             var sourceFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                "Riot Games", "Riot Client", "Data", RiotGamesPrivateSettingsFile);
-            var destinationFilePath = Path.Combine(accountFolderPath, RiotGamesPrivateSettingsFile);
+                "Riot Games", "Riot Client", "Data", _riotGamesPrivateSettingsFile);
+            var destinationFilePath = Path.Combine(accountFolderPath, _riotGamesPrivateSettingsFile);
             File.Copy(sourceFilePath, destinationFilePath, true);
         }
 
@@ -108,7 +156,7 @@ namespace LolAccountManager.View
             if (AccountListView.SelectedItem != null)
             {
                 var accountFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                    LolAccountManagerFolder, ((Account)AccountListView.SelectedItem).Username);
+                    _lolAccountManagerFolder, ((Account)AccountListView.SelectedItem).Username);
                 Directory.Delete(accountFolderPath, true);
                 _accounts.Remove(AccountListView.SelectedItem as Account);
             }
@@ -127,11 +175,11 @@ namespace LolAccountManager.View
             KillRiotRelatedProcesses();
 
             var accountFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                LolAccountManagerFolder, (AccountListView.SelectedItem as Account)?.Username ?? string.Empty);
-            var sourceFilePath = Path.Combine(accountFolderPath, RiotGamesPrivateSettingsFile);
+                _lolAccountManagerFolder, (AccountListView.SelectedItem as Account)?.Username ?? string.Empty);
+            var sourceFilePath = Path.Combine(accountFolderPath, _riotGamesPrivateSettingsFile);
             var destinationFilePath =
                 Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                    "Riot Games", "Riot Client", "Data", RiotGamesPrivateSettingsFile);
+                    "Riot Games", "Riot Client", "Data", _riotGamesPrivateSettingsFile);
             File.Copy(sourceFilePath, destinationFilePath, true);
 
             // start the client C:\Riot Games\League of Legends
@@ -143,15 +191,15 @@ namespace LolAccountManager.View
             // delete the RiotGamesPrivateSettings.yaml file
             var destinationFilePath =
                 Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Riot Games",
-                    "Riot Client", "Data", RiotGamesPrivateSettingsFile);
+                    "Riot Client", "Data", _riotGamesPrivateSettingsFile);
             File.Delete(destinationFilePath);
         }
 
         private static void KillRiotRelatedProcesses()
         {
-            foreach (var process in Process.GetProcessesByName(LeagueOfLegendsProcessName)) process.Kill();
+            foreach (var process in Process.GetProcessesByName(_leagueOfLegendsProcessName)) process.Kill();
 
-            foreach (var process in Process.GetProcessesByName(RiotClientProcessName)) process.Kill();
+            foreach (var process in Process.GetProcessesByName(_riotClientProcessName)) process.Kill();
         }
 
         private static void StartLeagueOfLegends()
@@ -163,7 +211,7 @@ namespace LolAccountManager.View
         {
             if (AccountListView.SelectedItem == null) return;
             var accountFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                LolAccountManagerFolder, ((Account)AccountListView.SelectedItem).Username);
+                _lolAccountManagerFolder, ((Account)AccountListView.SelectedItem).Username);
             Process.Start(accountFolderPath);
         }
 
@@ -192,11 +240,31 @@ namespace LolAccountManager.View
             {
                 Owner = this
             };
+            if (IsFirstRun)
+            {
+                StopWelcomeAnimation(SettingsTab);
+
+                var json = File.ReadAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    "LolAccountManager", "appconfig.json"));
+                var appConfig = JsonConvert.DeserializeObject<AppConfig>(json);
+                appConfig.FirstRun = false;
+                IsFirstRun = appConfig.FirstRun;
+
+                var json2 = JsonConvert.SerializeObject(appConfig, Formatting.Indented);
+                File.WriteAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    "LolAccountManager", "appconfig.json"), json2);
+            }
             settingsWindow.ShowDialog();
         }
 
         private void HelpTab_Click(object sender, MouseButtonEventArgs e)
         {
+            if (IsFirstRun)
+            {
+                StopWelcomeAnimation(HelpTab);
+                PlayIntroAnimation(SettingsTab);
+            }
+
             var helpWindow = new HelpWindow
             {
                 Owner = this

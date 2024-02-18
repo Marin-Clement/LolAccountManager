@@ -258,8 +258,8 @@
         <Border Background="#11092e" CornerRadius="20" Margin="0,0,0,0" BorderThickness="0,0,0,5"
                 BorderBrush="#3F8132" />
         <TabPanel Margin="0,0,0,50" HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="Auto" Height="Auto"
-                  Background="Transparent" x:Name="DraggableTabPanel"
-                  MouseLeftButtonDown="OnDraggableTabPanelMouseDown">
+                                                                   Background="Transparent" x:Name="DraggableTabPanel"
+                                                                   MouseLeftButtonDown="OnDraggableTabPanelMouseDown">
             <TabPanel.Resources>
                 <Style TargetType="TabItem">
                     <Setter Property="Background" Value="#110638" />
@@ -311,8 +311,8 @@
                     </Setter>
                 </Style>
             </TabPanel.Resources>
-            <TabItem Header="User Guide" PreviewMouseLeftButtonDown="HelpTab_Click" />
-            <TabItem Header="Settings" PreviewMouseLeftButtonDown="SettingsTab_Click" />
+            <TabItem Header="User Guide" PreviewMouseLeftButtonDown="HelpTab_Click" Name="HelpTab" />
+            <TabItem Header="Settings" PreviewMouseLeftButtonDown="SettingsTab_Click" Name="SettingsTab" />
             <TabItem Header="About" PreviewMouseLeftButtonDown="AboutTab_Click" />
         </TabPanel>
         <Button Content="X" HorizontalAlignment="Right" Click="Close_Click" Style="{StaticResource ExitButtonStyle}"

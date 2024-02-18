@@ -85,7 +85,7 @@
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0">
             <TextBlock Text="Lol Account Manager" FontWeight="Bold" FontSize="30"
                        Style="{StaticResource TitleTextBlockStyle}" />
-            <TextBlock Text="Version 2.0.0" FontSize="16" Style="{StaticResource TitleTextBlockStyle}" />
+            <TextBlock Name="VersionLabel" Text="Version 2.0.0" FontSize="16" Style="{StaticResource TitleTextBlockStyle}" />
             <TextBlock Text="© 2024 Naturally Gifted" FontSize="16" Style="{StaticResource TitleTextBlockStyle}" />
             <TextBlock Text="Authors: Marin Clement" FontSize="16" Style="{StaticResource LinkTextBlockStyle}"
                        PreviewMouseLeftButtonDown="LinkTextBlock_PreviewMouseLeftButtonDown" />

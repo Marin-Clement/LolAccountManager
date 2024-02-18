@@ -11,6 +11,19 @@ namespace LolAccountManager.View
         public AboutWindow()
         {
             InitializeComponent();
+            LoadVersion();
+        }
+
+        private void LoadVersion()
+        {
+            var json = System.IO.File.ReadAllText(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "LolAccountManager", "appconfig.json"));
+            var appConfig = Newtonsoft.Json.JsonConvert.DeserializeObject<AppConfig>(json);
+            if (appConfig == null)
+            {
+                throw new Exception("Failed to deserialize appconfig.json");
+            }
+            var version = appConfig.Version;
+            VersionLabel.Text = "Version: " + version;
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
