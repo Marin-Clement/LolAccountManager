@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows;
 using LolAccountManager.View;
 using Newtonsoft.Json;
@@ -16,6 +17,21 @@ namespace LolAccountManager
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+            
+            // check if this application is the only instance running
+            var processModule = System.Diagnostics.Process.GetCurrentProcess().MainModule;
+            if (processModule != null)
+            {
+                var processName = Path.GetFileNameWithoutExtension(processModule.FileName);
+                var processes = System.Diagnostics.Process.GetProcessesByName(processName);
+                if (processes.Length > 1)
+                {
+                    MessageBox.Show("Another instance of the application is already running.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Shutdown();
+                    return;
+                }
+            }
+
 
             bool startHidden = e.Args.Length > 0 && e.Args[0] == "/startHidden";
 
