@@ -73,7 +73,8 @@ namespace LolAccountManager.View
                 Title = "Select League of Legends Executable",
                 Filter = "Executable files (*.exe)|*.exe|All files (*.*)|*.*",
                 CheckFileExists = true,
-                Multiselect = false
+                Multiselect = false,
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86)
             };
 
             if (openFileDialog.ShowDialog() == true)
