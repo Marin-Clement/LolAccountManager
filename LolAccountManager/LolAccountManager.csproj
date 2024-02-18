@@ -104,7 +104,11 @@
     </ItemGroup>
     <ItemGroup>
         <Content Include="Resources\Font\JetBrainsMono-Bold.ttf"/>
-        <Content Include="Resources\HelpWindow\HelpWindowScreenshot1.png" />
+        <Resource Include="Resources\HelpWindow\HelpWindowScreenshot1.png" />
+        <Resource Include="Resources\HelpWindow\HelpWindowScreenshot2.png" />
+        <Resource Include="Resources\HelpWindow\HelpWindowScreenshot3.png" />
+        <Resource Include="Resources\HelpWindow\HelpWindowScreenshot4.png" />
+        <Resource Include="Resources\HelpWindow\HelpWindowScreenshot5.png" />
         <Content Include="Resources\Icon.ico" />
         <Resource Include="Resources\IconTaskBar.ico" />
     </ItemGroup>

@@ -22,27 +22,27 @@ namespace LolAccountManager.View
             new ScreenshotInfo
             {
                 Description = "Welcome to the League of Legends Account Manager!",
-                Path = "Resources/HelpWindow/HelpWindowScreenshot1.png"
+                Path = "pack://application:,,,/LolAccountManager;component/Resources/HelpWindow/HelpWindowScreenshot1.png"
             },
             new ScreenshotInfo
             {
                 Description = "To add an account, connect to the League of Legends client and check the 'Stay signed in' (IF NOT. The manager will not be able to log in.)",
-                Path = "Resources/HelpWindow/HelpWindowScreenshot2.png"
+                Path = "pack://application:,,,/LolAccountManager;component/Resources/HelpWindow/HelpWindowScreenshot2.png"
             },
             new ScreenshotInfo
             {
                 Description = "Now, Start the League of Legends client and click the 'Save Account' button. (You can match the account with the summoner name.{optional})",
-                Path = "Resources/HelpWindow/HelpWindowScreenshot3.png"
+                Path = "pack://application:,,,/LolAccountManager;component/Resources/HelpWindow/HelpWindowScreenshot3.png"
             },
             new ScreenshotInfo
             {
                 Description = "You will get automatically logged out of the client. The account is now added to the manager. You can now right-click the account to see the options.",
-                Path = "Resources/HelpWindow/HelpWindowScreenshot4.png"
+                Path = "pack://application:,,,/LolAccountManager;component/Resources/HelpWindow/HelpWindowScreenshot4.png"
             },
             new ScreenshotInfo
             {
                 Description = "Never Disconnect the account from the client. If you want to disconnect the account use the Disconnect button in the manager or simply exit the client.",
-                Path = "Resources/HelpWindow/HelpWindowScreenshot5.png"
+                Path = "pack://application:,,,/LolAccountManager;component/Resources/HelpWindow/HelpWindowScreenshot5.png"
             }
         };
 
@@ -75,10 +75,6 @@ namespace LolAccountManager.View
         private void UpdateScreenshot()
         {
             UpdateButtonState();
-            var assemblyLocation = Assembly.GetExecutingAssembly().Location;
-            var imagePath = Path.Combine(Path.GetDirectoryName(assemblyLocation) ?? throw new InvalidOperationException(),
-                _screenshots[_currentScreenshotIndex].Path);
-
             // fade in/out
             ScreenshotImage.BeginAnimation(OpacityProperty, null);
             ScreenshotImage.BeginAnimation(OpacityProperty,
@@ -88,7 +84,9 @@ namespace LolAccountManager.View
             ScreenShotDescription.BeginAnimation(OpacityProperty, null);
             ScreenShotDescription.BeginAnimation(OpacityProperty,
                 new DoubleAnimation(0, 1, new Duration(TimeSpan.FromSeconds(0.5))));
-            ScreenshotImage.Source = new BitmapImage(new Uri(imagePath, UriKind.Absolute));
+
+            var imagePath = _screenshots[_currentScreenshotIndex].Path;
+            ScreenshotImage.Source = new BitmapImage(new Uri(imagePath));
         }
 
         private void UpdateButtonState()

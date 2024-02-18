@@ -385,7 +385,7 @@
                 Style="{StaticResource MinimizeButtonStyle}" Width="40" Height="40" VerticalAlignment="Top"
                 Margin="0,5,60,0" />
         <Canvas HorizontalAlignment="Right" VerticalAlignment="Top" Width="200" Height="200" Margin="0,50,20,0">
-            <Image x:Name="AnimatedImage" Source="../Resources/Icon.ico" HorizontalAlignment="Right" Height="200"
+            <Image x:Name="AnimatedImage" Source="pack://application:,,,/LolAccountManager;component/Resources/IconTaskBar.ico" HorizontalAlignment="Right" Height="200"
                    Width="200" RenderTransformOrigin="0.5,0.5">
                 <Image.RenderTransform>
                     <ScaleTransform ScaleX="-1" />

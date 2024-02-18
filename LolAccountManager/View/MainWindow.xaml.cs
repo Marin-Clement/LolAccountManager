@@ -23,6 +23,7 @@ namespace LolAccountManager.View
         private static string _riotGamesPrivateSettingsFile;
         private static string _riotClientProcessName;
         private static string _leagueOfLegendsProcessName;
+        private static string _leagueOfLegendsPath;
         private ObservableCollection<Account> _accounts;
 
         private DateTime _lastClickTime = DateTime.MinValue;
@@ -98,6 +99,7 @@ namespace LolAccountManager.View
             _riotGamesPrivateSettingsFile = appConfig.RiotGamesPrivateSettingsFile;
             _riotClientProcessName = appConfig.RiotClientProcessName;
             _leagueOfLegendsProcessName = appConfig.LeagueOfLegendsProcessName;
+            _leagueOfLegendsPath = appConfig.LeagueOfLegendsPath;
         }
 
         private void PlayIntroAnimation(TabItem tab)
@@ -254,7 +256,7 @@ namespace LolAccountManager.View
 
         private static void StartLeagueOfLegends()
         {
-            Process.Start("C:\\Riot Games\\League of Legends\\LeagueClient.exe");
+            Process.Start(_leagueOfLegendsPath);
         }
 
         private void OpenAccountFolder_Click(object sender, RoutedEventArgs e)
