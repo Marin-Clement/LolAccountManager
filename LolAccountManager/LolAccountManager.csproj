@@ -37,6 +37,9 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="Hardcodet.NotifyIcon.Wpf, Version=1.1.0.0, Culture=neutral, PublicKeyToken=682384a853a08aad, processorArchitecture=MSIL">
+          <HintPath>..\packages\Hardcodet.NotifyIcon.Wpf.1.1.0\lib\net462\Hardcodet.NotifyIcon.Wpf.dll</HintPath>
+        </Reference>
         <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
             <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
         </Reference>
@@ -50,31 +53,36 @@
         <Reference Include="WindowsBase"/>
         <Reference Include="PresentationCore"/>
         <Reference Include="PresentationFramework"/>
-        <Reference Include="WindowsInputPlus.NetStandard, Version=1.0.8.0, Culture=neutral, PublicKeyToken=de2685b4776e9c2e, processorArchitecture=MSIL">
-            <HintPath>..\packages\InputSimulatorPlus.NetStandard.1.0.8\lib\netstandard2.0\WindowsInputPlus.NetStandard.dll</HintPath>
-        </Reference>
     </ItemGroup>
     <ItemGroup>
-        <ApplicationDefinition Include="App.xaml">
-            <Generator>MSBuild:Compile</Generator>
-            <SubType>Designer</SubType>
-        </ApplicationDefinition>
-        <Page Include="AddModifyAccountWindow.xaml"/>
-        <Page Include="MainWindow.xaml">
-            <Generator>MSBuild:Compile</Generator>
-            <SubType>Designer</SubType>
-        </Page>
-        <Compile Include="AddModifyAccountWindow.xaml.cs">
-            <DependentUpon>AddModifyAccountWindow.xaml</DependentUpon>
-        </Compile>
         <Compile Include="App.xaml.cs">
             <DependentUpon>App.xaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
-        <Compile Include="MainWindow.xaml.cs">
+        <Compile Include="View\AboutWindow.xaml.cs">
+            <DependentUpon>AboutWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="View\AddModifyAccountWindow.xaml.cs">
+            <DependentUpon>AddModifyAccountWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="View\HelpWindow.xaml.cs">
+            <DependentUpon>HelpWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="View\MainWindow.xaml.cs">
             <DependentUpon>MainWindow.xaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
+        <Compile Include="View\SettingsWindow.xaml.cs">
+            <DependentUpon>SettingsWindow.xaml</DependentUpon>
+        </Compile>
+        <Page Include="View\AboutWindow.xaml" />
+        <Page Include="View\AddModifyAccountWindow.xaml" />
+        <Page Include="View\HelpWindow.xaml" />
+        <Page Include="View\MainWindow.xaml">
+            <Generator>MSBuild:Compile</Generator>
+            <SubType>Designer</SubType>
+        </Page>
+        <Page Include="View\SettingsWindow.xaml" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Properties\AssemblyInfo.cs">
@@ -91,11 +99,25 @@
         </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
-        <None Include="App.config"/>
-        <None Include="packages.config"/>
+        <None Include="App.config" />
+        <None Include="packages.config" />
     </ItemGroup>
     <ItemGroup>
-        <Content Include="Resources\Icon.ico"/>
+        <Content Include="Resources\Font\JetBrainsMono-Bold.ttf" />
+        <Resource Include="Resources\HelpWindow\HelpWindowScreenshot1.png" />
+        <Resource Include="Resources\HelpWindow\HelpWindowScreenshot2.png" />
+        <Resource Include="Resources\HelpWindow\HelpWindowScreenshot3.png" />
+        <Resource Include="Resources\HelpWindow\HelpWindowScreenshot4.png" />
+        <Resource Include="Resources\HelpWindow\HelpWindowScreenshot5.png" />
+        <Resource Include="Resources\HelpWindow\HelpWindowScreenshot6.png" />
+        <Content Include="Resources\Icon.ico" />
+        <Resource Include="Resources\IconTaskBar.ico" />
+    </ItemGroup>
+    <ItemGroup>
+        <ApplicationDefinition Include="App.xaml">
+            <Generator>MSBuild:Compile</Generator>
+            <SubType>Designer</SubType>
+        </ApplicationDefinition>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
 </Project>

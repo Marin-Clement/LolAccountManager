@@ -1,33 +1,36 @@
 using System.Windows;
 using System.Windows.Input;
 
-namespace LolAccountManager
+namespace LolAccountManager.View
 {
     public partial class AddModifyAccountWindow
     {
         public AddModifyAccountWindow(Account account = null)
         {
             InitializeComponent();
-            WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
             if (account == null) return;
 
             UsernameTextBox.Text = account.Username;
-            PasswordBox.Text = account.Password;
         }
 
         public Account Account { get; private set; }
 
+        private void OnDraggableTabPanelMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed) DragMove();
+        }
+
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(UsernameTextBox.Text) || string.IsNullOrWhiteSpace(PasswordBox.Text))
+            if (string.IsNullOrWhiteSpace(UsernameTextBox.Text))
             {
-                MessageBox.Show("Please enter both username and password.", "Error", MessageBoxButton.OK,
+                MessageBox.Show("Please enter both username", "Error", MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
             else
             {
-                Account = new Account { Username = UsernameTextBox.Text, Password = PasswordBox.Text };
+                Account = new Account { Username = UsernameTextBox.Text };
                 DialogResult = true;
                 Close();
             }
